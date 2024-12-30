@@ -1,8 +1,9 @@
-#include <Windows.h>
+#include <windows.h>
 #include <winternl.h>
 #include <stdio.h>
 
 typedef int PROCESSINFOCLASS;
+#define ProcessDeviceMap 0x17
 
 typedef NTSTATUS(NTAPI* NtQueryInformationProcess_t) (
    HANDLE           ProcessHandle,
@@ -34,7 +35,7 @@ int main(void)
       = (NtQueryInformationProcess_t)GetProcAddress(LoadLibraryA("ntdll.dll"), "NtQueryInformationProcess");
 
    PROCESS_DEVICEMAP_INFORMATION out = { 0 };
-   NTSTATUS ret = NtQueryInformationProcess(-1, 0x17, &out, 0x24, 0);
+   NTSTATUS ret = NtQueryInformationProcess(-1, ProcessDeviceMap, &out, 0x24, 0);
 
    return 0;
 }
